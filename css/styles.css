@@ -7,6 +7,7 @@ body {
     color: #333;
 }
 
+/* Header */
 header {
     background-color: #3498db;
     color: #fff;
@@ -14,6 +15,7 @@ header {
     text-align: center;
 }
 
+/* Navigation */
 nav {
     background-color: #2980b9;
 }
@@ -23,6 +25,7 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-wrap: wrap;
 }
 
 nav li {
@@ -42,10 +45,12 @@ nav a.active {
     background-color: #1abc9c;
 }
 
+/* Main Content */
 main {
     padding: 20px;
 }
 
+/* Tabs */
 .tab-content {
     display: none;
 }
@@ -54,6 +59,7 @@ main {
     display: block;
 }
 
+/* Forms */
 form {
     margin: 20px 0;
 }
@@ -73,11 +79,7 @@ textarea {
     border-radius: 5px;
 }
 
-.buttons button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
+/* Buttons */
 button {
     background-color: #3498db;
     color: #fff;
@@ -85,17 +87,25 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #2980b9;
 }
 
+.buttons button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* Results Section */
 .results {
     margin-top: 20px;
     max-width: 700px;
 }
 
+/* Footer */
 footer {
     background-color: #3498db;
     color: #fff;
@@ -106,6 +116,7 @@ footer {
     width: 100%;
 }
 
+/* Chat Window */
 .chat-window {
     border: 1px solid #ccc;
     padding: 10px;
@@ -123,6 +134,7 @@ footer {
     font-weight: bold;
 }
 
+/* Responsive Design */
 @media (max-width: 600px) {
     nav ul {
         flex-direction: column;
