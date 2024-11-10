@@ -8,7 +8,9 @@
 <body>
     <h1>Voyago</h1>
     <div class="buttons">
-        <button type="button" onclick="getWeatherRecommendation()">Get Weather & Clothing Advice</button>
+        <li><input type="text" id="location" placeholder="Enter location">
+        <button type="button" onclick="getWeatherRecommendation()">Get Weather & Clothing Advice</button></li>
+        <li><button type="button" onclick="getAttractionAdvice()">Get Weather & Clothing Advice</button></li>
     </div>
     <div id="travel-plan-results" class="results"></div>
 
@@ -52,7 +54,8 @@
         async function getWeatherRecommendation() {
             const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
             const externalUserId = '007';
-            const query = 'What is the weather like in Oxford';
+            const location = document.getElementById('location').value;
+            const query = `What is the weather like in ${location} and what is some clothing advice`;
 
             try {
                 const sessionId = await createChatSession(apiKey, externalUserId);
