@@ -46,7 +46,7 @@ function getWeatherRecommendation() {
 
     const query = `What is the current weather in ${location}, and what should I wear today?`;
 
-    submitQuery(query, ['plugin-1711895182']); // Replace with actual Weather Agent plugin ID
+    submitQuery(query, ['plugin-1717419365']); // Weather plugin ID
 }
 
 function getTouristAttractions() {
@@ -60,7 +60,7 @@ function getTouristAttractions() {
 
     const query = `I prefer a ${travelStyle} travel style. Recommend tourist attractions for me to visit in ${location}, mentioning any tickets needed.`;
 
-    submitQuery(query, ['plugin-1717434994', 'plugin-1717419365']); // Replace with actual Google Maps and Trip Advisor plugin IDs
+    submitQuery(query, ['plugin-1723275191', 'plugin-1718945102']); // Google Maps and Trip Advisor plugin IDs
 }
 
 function getFoodCultureAdvice() {
@@ -72,7 +72,7 @@ function getFoodCultureAdvice() {
 
     const query = `Give me some advice on local food and culture in ${location}.`;
 
-    submitQuery(query, ['plugin-1717419365']); // Replace with actual Trip Advisor plugin ID
+    submitQuery(query, ['plugin-1718945102']); // Trip Advisor plugin ID
 }
 
 // Functions for Urgent Needs features
@@ -80,7 +80,7 @@ function getFoodCultureAdvice() {
 function findNearestRestroom() {
     const query = `Find the closest restroom to my current location.`;
 
-    submitQuery(query, ['plugin-1723468702']); // Replace with actual Restroom Agent plugin ID
+    submitQuery(query, ['plugin-1717340460']); // Restroom Agent plugin ID
 }
 
 function sendEmergencyMessage() {
@@ -94,7 +94,7 @@ function sendEmergencyMessage() {
 
     const query = `Send the message "I AM ${username}. SOS HELP ME. I AM AT [CURRENT LOCATION]" via WhatsApp to ${contactNumber}.`;
 
-    submitQuery(query, ['plugin-1717340460']); // Replace with actual WhatsApp Agent plugin ID
+    submitQuery(query, ['plugin-1726688608']); // WhatsApp Agent plugin ID
 }
 
 // Function for Live Company feature
