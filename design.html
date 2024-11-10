@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyago - Travel Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #0066cc;
+            text-align: center;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Tab styling */
+        .tab-bar {
+            display: flex;
+            background-color: #0066cc;
+            color: #ffffff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-bar div {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tab-bar div:hover {
+            background-color: #004a99;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Input styling */
+        select,
+        input[type="text"] {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            background-color: #0066cc;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004a99;
+        }
+
+        #travelResponseResult,
+        #weatherResponseResult,
+        #safetyResponseResult {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e0f3ff;
+            border: 1px solid #bdd9ff;
+            border-radius: 4px;
+        }
+
+        /* Flex styling for form groups */
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .form-group label {
+            margin: 0;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Voyago - Your Travel Companion</h1>
+
+        <!-- Tabs for navigation -->
+        <div class="tab-bar">
+            <div onclick="openTab('travelPlan')">Travel Plan</div>
+            <div onclick="openTab('weatherForecast')">Weather Forecast & Advice</div>
+            <div onclick="openTab('safetyAlert')">Safety Alert</div>
+        </div>
+
+        <!-- Travel Plan Tab Content -->
+        <div id="travelPlan" class="tab-content active">
+            <h2>Travel Itinerary</h2>
+
+            <label for="location">Enter Your Location:</label>
+            <input type="text" id="locationPlan" placeholder="Enter destination location...">
+
+            <div class="form-group">
+                <label for="travelStyle">Select Your Travel Style:</label>
+                <select id="travelStyle">
+                    <option value="culture">Culture Tourism</option>
+                    <option value="adventure">Outdoor Adventure</option>
+                    <option value="leisure">Leisure & Relaxation</option>
+                    <option value="gastronomy">Gastronomy Tour</option>
+                    <option value="nature">Nature & Wildlife</option>
+                </select>
+            </div>
+
+            <label for="comments">Additional Comments/Requests:</label>
+            <textarea id="comments" placeholder="Enter any specific preferences or requests here..."></textarea>
+
+            <button onclick="submitTravelPreference()">Get Recommendations</button>
+            <div id="travelResponseResult">Your itinerary recommendations will appear here.</div>
+        </div>
+
+
+        <!-- Weather Forecast Tab Content -->
+        <div id="weatherForecast" class="tab-content">
+            <h2>Weather Forecast & Advice</h2>
+            <p>Enter location for weather forecast:</p>
+            <input type="text" id="locationWeather" placeholder="Type location here">
+            <button onclick="fetchWeather()">Get Weather</button>
+            <div id="weatherResponseResult">Weather information will appear here.</div>
+        </div>
+
+        <!-- Safety Alert Tab Content -->
+        <div id="safetyAlert" class="tab-content">
+            <h2>Safety Alert</h2>
+            <p>Enter location for safety alert:</p>
+            <input type="text" id="locationSafety" placeholder="Type location here">
+            <button onclick="fetchSafetyAlert()">Get Safety Alert</button>
+            <div id="safetyResponseResult">Safety information will appear here.</div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        async function createChatSession(apiKey, externalUserId) {
+            const response = await fetch('https://api.on-demand.io/chat/v1/sessions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': apiKey
+                },
+                body: JSON.stringify({
+                    pluginIds: [],
+                    externalUserId: externalUserId
+                })
+            });
+
+            const data = await response.json();
+            return data.data.id;
+        }
+
+        async function submitQuery(apiKey, sessionId, query, plugins) {
+            const response = await fetch(`https://api.on-demand.io/chat/v1/sessions/${sessionId}/query`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': apiKey
+                },
+                body: JSON.stringify({
+                    endpointId: 'predefined-openai-gpt4o',
+                    query: query,
+                    pluginIds: plugins,
+                    responseMode: 'sync'
+                })
+            });
+
+            const data = await response.json();
+            return data;
+        }
+
+        async function submitTravelPreference() {
+            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
+            const location = document.getElementById('locationPlan').value;
+            const travelStyle = document.getElementById('travelStyle').value;
+            const comments = document.getElementById('comments').value;
+            const query = `Provide a day itinerary in ${location} focusing on ${travelStyle}. Additional requests: ${comments}`;
+
+            document.getElementById('travelResponseResult').innerText = `Fetching recommendations for ${travelStyle} style in ${location}...`;
+
+            try {
+                const sessionId = await createChatSession(apiKey, '007');
+                const response = await submitQuery(apiKey, sessionId, query, ['plugin-1718945102', 'plugin-1723275191']);
+
+                if (response.data && response.data.answer) {
+                    // Convert the response into HTML-friendly formatting
+                    const formattedResponse = formatResponseAsHTML(response.data.answer);
+                    document.getElementById('travelResponseResult').innerHTML = formattedResponse;
+                } else {
+                    document.getElementById('travelResponseResult').innerText = "No response received.";
+                }
+            } catch (error) {
+                document.getElementById('travelResponseResult').innerText = "Error fetching recommendations.";
+            }
+        }
+
+        // Function to format response text with HTML tags for display
+        function formatResponseAsHTML(responseText) {
+            // Split by day headings and add HTML tags
+            const days = responseText.split("###").filter(day => day.trim() !== "");
+
+            let formattedText = '';
+            days.forEach(day => {
+                const dayParts = day.split("\n").filter(part => part.trim() !== "");
+
+                // Wrap each day heading in <h3> tag
+                if (dayParts.length > 0) {
+                    formattedText += `<h3>${dayParts[0].trim()}</h3>`;
+                }
+
+                // Wrap each segment (morning, afternoon, etc.) in a <strong> tag
+                dayParts.slice(1).forEach(part => {
+                    if (part.startsWith("**") && part.endsWith("**")) {
+                        formattedText += `<strong>${part.replace(/\*\*/g, '')}</strong><br>`;
+                    } else {
+                        formattedText += `<p>${part}</p>`;
+                    }
+                });
+            });
+
+            return formattedText;
+        }
+
+        async function fetchWeather() {
+            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
+            const location = document.getElementById('locationWeather').value;
+            const query = `Weather forecast for ${location} with clothing advice.`;
+
+            document.getElementById('weatherResponseResult').innerText = `Fetching weather for ${location}...`;
+            try {
+                const sessionId = await createChatSession(apiKey, '007');
+                const response = await submitQuery(apiKey, sessionId, query, ['plugin-1712327325', 'plugin-1713962163', 'plugin-1713924030']);
+                document.getElementById('weatherResponseResult').innerText = response.data.answer || "No response received.";
+            } catch (error) {
+                document.getElementById('weatherResponseResult').innerText = "Error fetching weather information.";
+            }
+        }
+
+
+
+        async function fetchSafetyAlert() {
+            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
+            const location = document.getElementById('locationSafety').value;
+            const query = `Any current safety alerts for ${location}.`;
+
+            document.getElementById('safetyResponseResult').innerText = `Fetching safety alert for ${location}...`;
+            try {
+                const sessionId = await createChatSession(apiKey, '007');
+                const response = await submitQuery(apiKey, sessionId, query, ['plugin-1713924030']);
+                document.getElementById('safetyResponseResult').innerText = response.data.answer || "No response received.";
+            } catch (error) {
+                document.getElementById('safetyResponseResult').innerText = "Error fetching safety alert.";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
