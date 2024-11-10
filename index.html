@@ -242,7 +242,7 @@
 
                 // Output the response to the HTML element with id "travel-plan-results"
                 document.getElementById('travel-plan-results').textContent = 
-                    queryResponseData.data.response || 'No response data available';
+                    queryResponseData || 'No response data available';
 
             } catch (error) {
                 console.error('Error fetching weather recommendation:', error);
