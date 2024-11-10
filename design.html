@@ -19,7 +19,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100%;
+            overflow-y: auto;
         }
 
         h1 {
@@ -31,6 +32,7 @@
         .container {
             background-color: #ffffff;
             width: 90%;
+            margin: auto;
             max-width: 800px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
@@ -108,6 +110,9 @@
             background-color: #e0f3ff;
             border: 1px solid #bdd9ff;
             border-radius: 4px;
+            overflow-y: auto;
+            /*max-height: 300px;
+             Limit height to enable scrolling */
         }
 
         /* Flex styling for form groups */
@@ -122,6 +127,34 @@
             margin: 0;
             white-space: nowrap;
         }
+
+        #chatWindow {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+        }
+
+        .bot-message,
+        .user-message {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .bot-message {
+            background-color: #e0f3ff;
+            border: 1px solid #bdd9ff;
+        }
+
+        .user-message {
+            background-color: #d1ffd0;
+            border: 1px solid #a3e4a1;
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -135,6 +168,7 @@
             <div onclick="openTab('travelPlan')">Travel Plan</div>
             <div onclick="openTab('weatherForecast')">Weather Forecast & Advice</div>
             <div onclick="openTab('safetyAlert')">Safety Alert</div>
+            <div onclick="openTab('jokeChatbot')">Chat Bot</div>
         </div>
 
         <!-- Travel Plan Tab Content -->
@@ -180,6 +214,16 @@
             <button onclick="fetchSafetyAlert()">Get Safety Alert</button>
             <div id="safetyResponseResult">Safety information will appear here.</div>
         </div>
+
+        <div id="jokeChatbot" class="tab-content">
+            <h2>Joke Chatbot</h2>
+            <div id="chatWindow">
+                <p class="bot-message">Hi! I'm here to tell you jokes. Type something to start!</p>
+            </div>
+            <input type="text" id="userMessage" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
     </div>
 
     <script>
@@ -294,8 +338,6 @@
             }
         }
 
-
-
         async function fetchSafetyAlert() {
             const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
             const location = document.getElementById('locationSafety').value;
@@ -310,6 +352,46 @@
                 document.getElementById('safetyResponseResult').innerText = "Error fetching safety alert.";
             }
         }
+
+        // Predefined list of jokes
+        const jokes = [
+            "Why did the scarecrow win an award? Because he was outstanding in his field!",
+            "I'm reading a book on anti-gravity. It's impossible to put down!",
+            "Why don’t scientists trust atoms? Because they make up everything!",
+            "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+            "Why did the bicycle fall over? Because it was two-tired!"
+        ];
+
+        // Function to handle sending user messages and getting a joke response
+        function sendMessage() {
+            const userMessage = document.getElementById('userMessage').value.trim();
+            if (userMessage) {
+                displayMessage(userMessage, 'user');
+                document.getElementById('userMessage').value = '';
+
+                // Simulate bot response after a short delay
+                setTimeout(() => {
+                    const joke = getRandomJoke();
+                    displayMessage(joke, 'bot');
+                }, 1000); // 1-second delay for a more conversational feel
+            }
+        }
+
+        // Function to display messages in the chat window
+        function displayMessage(message, sender) {
+            const chatWindow = document.getElementById('chatWindow');
+            const messageElement = document.createElement('p');
+            messageElement.className = sender === 'bot' ? 'bot-message' : 'user-message';
+            messageElement.innerText = message;
+            chatWindow.appendChild(messageElement);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the latest message
+        }
+
+        // Function to get a random joke
+        function getRandomJoke() {
+            return jokes[Math.floor(Math.random() * jokes.length)];
+        }
+
     </script>
 
 </body>
