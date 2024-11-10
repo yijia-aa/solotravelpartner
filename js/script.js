@@ -37,17 +37,76 @@ window.onload = function() {
 
 // Functions for Travel Plan features
 
-function getWeatherRecommendation() {
-    const location = document.getElementById('location-input').value;
-    if (!location) {
-        alert('Please enter your current location.');
-        return;
+// function getWeatherRecommendation() {
+//     const location = document.getElementById('location-input').value;
+//     if (!location) {
+//         alert('Please enter your current location.');
+//         return;
+//     }
+
+//     const query = `What is the current weather in ${location}, and what should I wear today?`;
+
+//     submitQuery(query, ['plugin-1713924030']); // Weather plugin ID
+// }
+
+
+async function getWeatherRecommendation() {
+    const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
+    const externalUserId = '007';
+
+    // Step 1: Create Chat Session
+    const createSessionUrl = 'https://api.on-demand.io/chat/v1/sessions';
+    const createSessionHeaders = {
+        'apikey': apiKey,
+        'Content-Type': 'application/json'
+    };
+    const createSessionBody = JSON.stringify({
+        "pluginIds": [],
+        "externalUserId": externalUserId
+    });
+
+    try {
+        // Make the request to create a chat session
+        const createSessionResponse = await fetch(createSessionUrl, {
+            method: 'POST',
+            headers: createSessionHeaders,
+            body: createSessionBody
+        });
+
+        const createSessionData = await createSessionResponse.json();
+        const sessionId = createSessionData.data.id;
+
+        // Step 2: Submit Query
+        const submitQueryUrl = `https://api.on-demand.io/chat/v1/sessions/${sessionId}/query`;
+        const submitQueryHeaders = {
+            'apikey': apiKey,
+            'Content-Type': 'application/json'
+        };
+        const submitQueryBody = JSON.stringify({
+            "endpointId": "predefined-openai-gpt4o",
+            "query": "What's the weather like?",
+            "pluginIds": ["plugin-1712327325", "plugin-1713962163", "plugin-1723275191", "plugin-1713924030"],
+            "responseMode": "sync"
+        });
+
+        // Make the request to submit a query
+        const queryResponse = await fetch(submitQueryUrl, {
+            method: 'POST',
+            headers: submitQueryHeaders,
+            body: submitQueryBody
+        });
+
+        const queryResponseData = await queryResponse.json();
+
+        // Print the response from the query
+        console.log(queryResponseData);
+        return queryResponseData;
+
+    } catch (error) {
+        console.error('Error fetching weather recommendation:', error);
     }
-
-    const query = `What is the current weather in ${location}, and what should I wear today?`;
-
-    submitQuery(query, ['plugin-1717419365']); // Weather plugin ID
 }
+
 
 function getTouristAttractions() {
     const location = document.getElementById('location-input').value;
