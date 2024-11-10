@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat API Example</title>
+    <title>Voyago App</title>
 </head>
 <body>
     <h1>Voyago</h1>
     <div class="buttons">
         <li><input type="text" id="location" placeholder="Enter location">
-        <button type="button" onclick="getWeatherRecommendation()">Get Weather & Clothing Advice</button></li>
+        <button type="button" onclick="fetchWeather()">Get Weather & Clothing Advice</button></li>
         <li><select id="intensity">
             <option value="flexible">Flexible Trip</option>
             <option value="intensive">Intensive Travelling</option>
         </select>
-        <button type="button" onclick="getAttractionAdvice()">Get Attraction Advice</button></li>
+        <button type="button" onclick="submitTravelPreference()">Get Attraction Advice</button></li>
+        <li><button type="button" onclick="fetchSafetyAlert()">Get Attraction Advice</button></li>
+    </div></li>
     </div>
     <div id="travel-plan-results" class="results"></div>
 
@@ -65,7 +67,7 @@
                 body: JSON.stringify({
                     endpointId: 'predefined-openai-gpt4o',
                     query: query,
-                    pluginIds: ['plugin-1718945102', 'plugin-1723275191'],
+                    pluginIds: ['plugin-1718945102', 'plugin-1723275191'], // tripadvisor and google map plugins
                     responseMode: 'sync'
                 })
             });
@@ -74,17 +76,34 @@
             return data;
         }
 
-        async function getWeatherRecommendation() {
-            const apiKey = ONDEMAND_API_KEY; 
-            const externalUserId = EXTERNAL_USER_ID; 
+        async function submitSafetyAlert(apiKey, sessionId, query) {
+            const response = await fetch(`https://api.on-demand.io/chat/v1/sessions/${sessionId}/query`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': apiKey
+                },
+                body: JSON.stringify({
+                    endpointId: 'predefined-openai-gpt4o',
+                    query: query,
+                    pluginIds: ['plugin-1713924030'], // Internet plugin
+                    responseMode: 'sync'
+                })
+            });
+
+            const data = await response.json();
+            return data;
+        }
+
+        async function fetchWeather() {
+            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3'; 
+            const externalUserId = '007'; 
             const location = document.getElementById('location').value;
             const query = `What is the weather like in ${location} and what is some clothing advice`;
 
             try {
                 const sessionId = await createChatSession(apiKey, externalUserId);
                 const response = await submitQueryWeather(apiKey, sessionId, query);
-                
-                // Display the results in the travel plan results div
                 const resultsDiv = document.getElementById('travel-plan-results');
                 resultsDiv.innerHTML = `<h2>Weather & Clothing Advice:</h2><p>${response.data.answer}</p>`;
             } catch (error) {
@@ -94,7 +113,7 @@
             }
         }
 
-        async function getAttractionAdvice() {
+        async function submitTravelPreference() {
             const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3'; 
             const externalUserId = '007'; 
             const location = document.getElementById('location').value;
@@ -104,14 +123,30 @@
             try {
                 const sessionId = await createChatSession(apiKey, externalUserId);
                 const response = await submitQueryAttraction(apiKey, sessionId, query);
-                
-                // Display the results in the travel plan results div
                 const resultsDiv = document.getElementById('travel-plan-results');
                 if (response.data && response.data.answer) {
                     resultsDiv.innerHTML = `<h2>Attraction Advice:</h2><p>${response.data.answer}</p>`;
                 } else {
                     resultsDiv.innerHTML = '<p>No answer received from the server. Please try again later.</p>';
                 }
+            } catch (error) {
+                console.error('Error:', error);
+                const resultsDiv = document.getElementById('travel-plan-results');
+                resultsDiv.innerHTML = '<p>Sorry, something went wrong. Please try again later.</p>';
+            }
+        }
+
+        async function fetchSafetyAlert() {
+            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3'; 
+            const externalUserId = '007'; 
+            const location = document.getElementById('location').value;
+            const query = `Any dangerous events is happening or happened in the past few days in ${location}? Is the place safe to visit?`;
+
+            try {
+                const sessionId = await createChatSession(apiKey, externalUserId);
+                const response = await submitSafetyAlert(apiKey, sessionId, query);
+                const resultsDiv = document.getElementById('travel-plan-results');
+                resultsDiv.innerHTML = `<h2>Safety Advice:</h2><p>${response.data.answer}</p>`;
             } catch (error) {
                 console.error('Error:', error);
                 const resultsDiv = document.getElementById('travel-plan-results');
