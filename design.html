@@ -312,7 +312,7 @@
 
                 if (response.data && response.data.answer) {
                     // Convert the response into HTML-friendly formatting
-                    const formattedResponse = formatResponseAsHTML(response.data.answer);
+                    const formattedResponse = formatResponseAsHTML3(response.data.answer);
                     document.getElementById('travelResponseResult').innerHTML = formattedResponse;
                 } else {
                     document.getElementById('travelResponseResult').innerText = "No response received.";
@@ -348,6 +348,72 @@
 
             return formattedText;
         }
+
+        // Function to format response text with HTML tags for display
+        function formatResponseAsHTML2(responseText) {
+            // Split response by lines and add HTML tags where necessary
+            const lines = responseText.split("\n");
+            let formattedText = '';
+
+            lines.forEach(line => {
+                line = line.trim();
+
+                // Format bold text (replace **text** with <strong>text</strong>)
+                line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+                // Check for specific keywords like "Day" to add a heading tag
+                if (line.startsWith("Day")) {
+                    formattedText += `<h3>${line}</h3>`;
+                } else if (line.startsWith("-")) {
+                    // Format bullet points
+                    formattedText += `<li>${line.substring(1).trim()}</li>`;
+                } else if (line) {
+                    // Regular paragraph
+                    formattedText += `<p>${line}</p>`;
+                }
+            });
+
+            // Wrap bullet points in a <ul> tag
+            formattedText = formattedText.replace(/(<li>.*?<\/li>)/g, "<ul>$1</ul>");
+
+            return formattedText;
+        }
+
+        // Function to format response text with HTML tags for display
+        function formatResponseAsHTML3(responseText) {
+            // Split response by lines and add HTML tags where necessary
+            const lines = responseText.split("\n");
+            let formattedText = '';
+
+            lines.forEach(line => {
+                line = line.trim();
+
+                // Convert ### headings to <h3>
+                if (line.startsWith("###")) {
+                    line = `<h3>${line.substring(3).trim()}</h3>`;
+                } else {
+                    // Format bold text (replace **text** with <strong>text</strong>)
+                    line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+                    // Format bullet points
+                    if (line.startsWith("-")) {
+                        line = `<li>${line.substring(1).trim()}</li>`;
+                    } else if (line) {
+                        // Regular paragraph for any other text
+                        line = `<p>${line}</p>`;
+                    }
+                }
+
+                formattedText += line;
+            });
+
+            // Wrap bullet points in a <ul> tag if <li> elements are found
+            formattedText = formattedText.replace(/(<li>.*?<\/li>)/g, "<ul>$1</ul>");
+
+            return formattedText;
+        }
+
+
 
         async function fetchWeather() {
             const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
