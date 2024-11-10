@@ -1,7 +1,7 @@
 
 # Voyago - Travel Companion
 
-**Voyago** is a web application designed to enhance the travel experience with convenient features, including a travel itinerary planner, weather forecasts, safety alerts, and a humorous chatbot. The app utilizes OnDemand agents such as the Tripadvisor and internet agents for travel planning and safety alerts, and a custom-developed joke agent to make interactions fun and engaging.
+**Voyago** is a web application designed to enhance the travel experience with convenient features, including a travel itinerary planner, weather forecasts, safety alerts, and a humorous chatbot. The app utilises OnDemand agents such as the Tripadvisor and internet agents for travel planning and safety alerts, and a custom-developed joke agent to make interactions fun and engaging.
 
 ## Table of Contents
 - [Features](#features)
@@ -57,7 +57,8 @@
    ```
 
 2. **Set up API Key**:
-   - Replace `apiKey` with your valid API key from on-demand.io.
+   - Get all the required plugins on your OnDemand platform.
+   - Replace `apiKey` with your own API key from on-demand.io.
 
 3. **Run the Application**:
    - Open the `index.html` file in a browser, or serve it through a local server:
