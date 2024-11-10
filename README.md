@@ -1,6 +1,6 @@
-# solotravelpartner
+# Voyago
 
-Solo Traveller Partner is a web application designed to be a helpful companion for solo travelers. It integrates various features using the OnDemand API.
+Voyago is a web application designed to be a helpful companion for solo travelers. It integrates various features using the OnDemand API.
 
 ## Features
 
