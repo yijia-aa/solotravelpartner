@@ -7,6 +7,10 @@
 </head>
 <body>
     <h1>Voyago</h1>
+    <div class="buttons">
+        <button type="button" onclick="getWeatherRecommendation()">Get Weather & Clothing Advice</button>
+    </div>
+    <div id="travel-plan-results" class="results"></div>
     
     <script>
         async function createChatSession(apiKey, externalUserId) {
