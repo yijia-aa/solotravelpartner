@@ -128,32 +128,52 @@
             white-space: nowrap;
         }
 
-        #chatWindow {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
+        .chat-window {
             padding: 10px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
+            background-color: #f7f7f7;
+            height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .bot-message,
         .user-message {
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 4px;
+            max-width: 70%;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 20px;
         }
 
+        /* Bot and User Message Styles */
         .bot-message {
             background-color: #e0f3ff;
-            border: 1px solid #bdd9ff;
+            align-self: flex-start;
         }
 
         .user-message {
             background-color: #d1ffd0;
-            border: 1px solid #a3e4a1;
-            text-align: right;
+            align-self: flex-end;
+        }
+
+        /* Ensure label and dropdown box are on separate lines */
+        .form-group-column {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .form-group-column label {
+            margin-bottom: 5px;
+        }
+
+        .form-group-column select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -178,7 +198,7 @@
             <label for="location">Enter Your Location:</label>
             <input type="text" id="locationPlan" placeholder="Enter destination location...">
 
-            <div class="form-group">
+            <div class="form-group-column">
                 <label for="travelStyle">Select Your Travel Style:</label>
                 <select id="travelStyle">
                     <option value="culture">Culture Tourism</option>
@@ -188,6 +208,7 @@
                     <option value="nature">Nature & Wildlife</option>
                 </select>
             </div>
+
 
             <label for="comments">Additional Comments/Requests:</label>
             <textarea id="comments" placeholder="Enter any specific preferences or requests here..."></textarea>
@@ -216,16 +237,17 @@
         </div>
 
         <div id="jokeChatbot" class="tab-content">
-            <h2>Joke Chatbot</h2>
-            <div id="chatWindow">
+            <div class="chatbot-header">
+                <h2>Joke Chatbot</h2>
+            </div>
+            <div id="chatWindow" class="chat-window">
                 <p class="bot-message">Hi! I'm here to tell you jokes. Type something to start!</p>
             </div>
             <div class="input-container">
-                <input type="text" id="userMessage" placeholder="Type your message here...">
+                <input type="text" id="userMessage" placeholder="Type your message here..." autocomplete="off">
                 <button onclick="sendMessage()">Send</button>
             </div>
         </div>
-
 
     </div>
 
@@ -237,6 +259,7 @@
             }
             document.getElementById(tabId).classList.add('active');
         }
+
 
         async function createChatSession(apiKey, externalUserId) {
             const response = await fetch('https://api.on-demand.io/chat/v1/sessions', {
@@ -329,7 +352,7 @@
         async function fetchWeather() {
             const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
             const location = document.getElementById('locationWeather').value;
-            const query = `Weather forecast for ${location} with clothing advice.`;
+            const query = `Weather forecast for ${location} recently and give clothing advice. `;
 
             document.getElementById('weatherResponseResult').innerText = `Fetching weather for ${location}...`;
             try {
@@ -344,7 +367,7 @@
         async function fetchSafetyAlert() {
             const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
             const location = document.getElementById('locationSafety').value;
-            const query = `Any current safety alerts for ${location}.`;
+            const query = `Any current safety alerts for ${location}. `;
 
             document.getElementById('safetyResponseResult').innerText = `Fetching safety alert for ${location}...`;
             try {
@@ -355,45 +378,6 @@
                 document.getElementById('safetyResponseResult').innerText = "Error fetching safety alert.";
             }
         }
-        /*
-        // Predefined list of jokes
-        const jokes = [
-            "Why did the scarecrow win an award? Because he was outstanding in his field!",
-            "I'm reading a book on anti-gravity. It's impossible to put down!",
-            "Why don’t scientists trust atoms? Because they make up everything!",
-            "I told my wife she was drawing her eyebrows too high. She looked surprised.",
-            "Why did the bicycle fall over? Because it was two-tired!"
-        ];
-
-        // Function to handle sending user messages and getting a joke response
-        function sendMessage() {
-            const userMessage = document.getElementById('userMessage').value.trim();
-            if (userMessage) {
-                displayMessage(userMessage, 'user');
-                document.getElementById('userMessage').value = '';
-
-                // Simulate bot response after a short delay
-                setTimeout(() => {
-                    const joke = getRandomJoke();
-                    displayMessage(joke, 'bot');
-                }, 1000); // 1-second delay for a more conversational feel
-            }
-        }
-
-        // Function to display messages in the chat window
-        function displayMessage(message, sender) {
-            const chatWindow = document.getElementById('chatWindow');
-            const messageElement = document.createElement('p');
-            messageElement.className = sender === 'bot' ? 'bot-message' : 'user-message';
-            messageElement.innerText = message;
-            chatWindow.appendChild(messageElement);
-            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the latest message
-        }
-
-        // Function to get a random joke
-        function getRandomJoke() {
-            return jokes[Math.floor(Math.random() * jokes.length)];
-        }*/
 
         // Function to handle user message sending and chatbot response
         async function sendMessage() {
