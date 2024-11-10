@@ -94,8 +94,6 @@
 ```plaintext
 voyago-travel-companion/
 ├── index.html            # Main HTML file
-├── styles.css            # Custom styles for the application
-├── script.js             # JavaScript for handling API requests and interactions
 └── README.md             # Documentation file
 ```
 
