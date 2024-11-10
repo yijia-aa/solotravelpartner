@@ -52,12 +52,12 @@
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/voyago-travel-companion.git
-   cd voyago-travel-companion
+   git clone https://github.com/yijia-aa/voyago.git
+   cd voyago
    ```
 
 2. **Set up API Key**:
-   - Replace the placeholder `apiKey` values in the JavaScript with your valid API key from OnDemand.io.
+   - Replace `apiKey` with your valid API key from on-demand.io.
 
 3. **Run the Application**:
    - Open the `index.html` file in a browser, or serve it through a local server:
@@ -98,10 +98,7 @@ voyago-travel-companion/
 ```
 
 ### Key Files
-- **index.html**: Contains the main structure of the application, including all tabs and sections.
-- **script.js**: Handles interactions, API requests, and responses for the travel plan, weather, safety alerts, and chatbot.
-- **styles.css**: Includes the styling rules for different UI elements, such as tabs, input fields, and the chatbot.
-
+- **index.html**: Contains the main structure of the application, including all tabs and sections, css and Javascripts.
 ---
 
 ## API Integrations
@@ -110,6 +107,7 @@ voyago-travel-companion/
 
 The application integrates various OnDemand agents for data retrieval:
 - **Tripadvisor Agent**: Provides location-based travel recommendations and popular attractions.
+- **Google Map Agent**: Used together with Tripadvisor Agent to provide more detailed recommendations.
 - **Internet Agent**: Used for general web information, including weather forecasts and safety alerts.
 - **Custom Joke Agent**: A knowledge-based system containing over 1,000 jokes, tailored for the chatbot to enhance user engagement.
 
