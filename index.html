@@ -75,13 +75,12 @@
             }
         }
 
-
         async function getAttractionAdvice() {
-            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3';
-            const externalUserId = '007';
+            const apiKey = '6iTH4QKVAT4yjfbPAq1KnM3WgEoTNhA3'; 
+            const externalUserId = '007'; 
             const location = document.getElementById('location').value;
-            const type = document.getElementById('intensity').value;
-            const query = `Can you give me a day itinerary consisting of major attractions in ${location}. And I preferred travelling style is {intensity}.`;
+            const intensity = document.getElementById('intensity').value;
+            const query = `Can you give me a day itinerary consisting of major attractions in ${location}? I prefer a ${intensity} style of travel.`;
 
             try {
                 const sessionId = await createChatSession(apiKey, externalUserId);
@@ -89,7 +88,7 @@
                 
                 // Display the results in the travel plan results div
                 const resultsDiv = document.getElementById('travel-plan-results');
-                resultsDiv.innerHTML = `<h2>Weather & Clothing Advice:</h2><p>${response.data.answer}</p>`;
+                resultsDiv.innerHTML = `<h2>Attraction Advice:</h2><p>${response.data.answer}</p>`;
             } catch (error) {
                 console.error('Error:', error);
                 const resultsDiv = document.getElementById('travel-plan-results');
