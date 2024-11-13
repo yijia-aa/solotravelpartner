@@ -3,6 +3,11 @@
 
 **Voyago** is a web application designed to enhance the travel experience with convenient features, including a travel itinerary planner, weather forecasts, safety alerts, and a humorous chatbot. The app utilises OnDemand agents such as the Tripadvisor and internet agents for travel planning and safety alerts, and a custom-developed joke agent to make interactions fun and engaging.
 
+Team Members & Roles:
+Xiaolan(Back-end, OnDemand Agent Design)
+Yihe(Front-end)
+Keira(Front-end)
+
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
